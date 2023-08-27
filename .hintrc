@@ -4,5 +4,14 @@
   ],
   "hints": {
     "typescript-config/is-valid": "off"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not ie 11",
+    "not and_chr <= 114",
+    "not chrome <= 114",
+    "not edge <= 114",
+    "not opera <= 100",
+    "not samsung <= 21"
+  ]
 }
