@@ -2,8 +2,8 @@
 
 import { ServerWithMembersWithProfiles } from "@/types"
 import { MemberRole } from "@prisma/client"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, SettingsIcon, UserPlus, Users } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ChevronDown, PlusCircle, SettingsIcon, UserPlus, Users } from "lucide-react"
 
 interface ServerHeaderProps {
     server: ServerWithMembersWithProfiles
@@ -57,6 +57,17 @@ export const ServerHeader = ({
                         Manage Members
                         <Users className="h-4 w-4 ml-auto"/>
                     </DropdownMenuItem>
+                )}
+                {isModerator && (
+                    <DropdownMenuItem
+                        className="px-3 py-2 text-sm cursor-pointer"
+                    >
+                        Create Channel
+                        <PlusCircle className="h-4 w-4 ml-auto"/>
+                    </DropdownMenuItem>
+                )}
+                {isModerator && (
+                    <DropdownMenuSeparator />
                 )}
             </DropdownMenuContent>
         </DropdownMenu>
