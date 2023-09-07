@@ -1,8 +1,9 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
+import qs from "query-string";
 import axios  from 'axios';
 
 import * as z from "zod";
@@ -51,7 +52,8 @@ const formSchema = z.object({
 
 export const CreateChannelModel = () => {
 
-  const { isOpen, onClose, type } = useModal()
+  const { isOpen, onClose, type, data } = useModal()
+  const params = useParams()
   const router = useRouter()
 
   const isModalOpen = isOpen && type === "createChannel"
@@ -70,7 +72,15 @@ export const CreateChannelModel = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
     try {
-      await axios.post('/api/channels', values);
+
+      const url = qs.stringifyUrl({
+        url: "/api/channels",
+        query: {
+          serverId: params?.serverId
+        }
+      });
+
+      await axios.post(url, values);
 
       form.reset();
       router.refresh();
