@@ -80,8 +80,7 @@ export const CreateChannelModel = () => {
         }
       });
 
-      console.log(await axios.post(url, values));
-      await axios.post(url, values);
+        await axios.post(url, values);
 
       form.reset();
       router.refresh();
