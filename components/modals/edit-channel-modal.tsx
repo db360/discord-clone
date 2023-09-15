@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import qs from "query-string";
 import axios  from 'axios';
@@ -50,37 +51,48 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType)
 });
 
-export const CreateChannelModel = () => {
+export const EditChannelModal = () => {
 
   const { isOpen, onClose, type, data } = useModal()
-  const params = useParams()
   const router = useRouter()
 
-  const isModalOpen = isOpen && type === "createChannel"
+  const isModalOpen = isOpen && type === "editChannel"
+  const { channel, server } = data
 
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT
+      type: channel?.type || ChannelType.TEXT
     }
   });
+
+  // la pagina se renderiza antes que el channel data, por eso tenemos
+  // que renderizarlo en el useEffect
+  useEffect(() => {
+    if(channel) {
+      form.setValue("name", channel.name)
+      form.setValue("type", channel.type)
+    }
+
+  }, [form, channel])
+
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    // console.log(values);
     try {
 
       const url = qs.stringifyUrl({
-        url: "/api/channels",
+        url: `/api/channels/${channel?.id}`,
         query: {
-          serverId: params?.serverId
+          serverId: server?.id
         }
       });
 
-        await axios.post(url, values);
+        await axios.patch(url, values);
 
       form.reset();
       router.refresh();
@@ -101,7 +113,7 @@ export const CreateChannelModel = () => {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -164,7 +176,7 @@ export const CreateChannelModel = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading} variant="primary">
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>

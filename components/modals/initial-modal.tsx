@@ -67,7 +67,7 @@ const InitialModal = () => {
       form.reset();
       router.refresh();
       window.location.reload();
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +85,7 @@ const InitialModal = () => {
             Customize your server
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Giver your server a personality with a name and an image. You can
+            Giver your server a personality with a name and a image. You can
             always change it later.
           </DialogDescription>
         </DialogHeader>
